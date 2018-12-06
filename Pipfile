@@ -5,7 +5,15 @@ verify_ssl = true
 
 [dev-packages]
 
+
 [packages]
+flask = "*"
+requests = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+"psycopg2-binary" = "*"
+flask-wtf = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.6"
