@@ -26,3 +26,16 @@ class City(db.Model):
 
     def __repr__(self):
         return '<City {}>'.format(self.cityName)
+
+
+# class Company(db.Model):
+#     __tablename__ = 'companies'
+
+#     symbol = db.Column(db.String(64), index=True, unique=True)
+#     CEO = db.Column(db.String(64))
+
+#     dated_created = db.Column(db.DateTime, default=dt.now())
+
+#     def __repr__(self):
+#         return '<Company {}>'.format(self.companyName)
+

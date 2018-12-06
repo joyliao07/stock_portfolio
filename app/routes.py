@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 # Models
 from .models import db, City
+# from .models import Company, db
 
 # Forms
 from .forms import CitySearchForm
@@ -40,7 +41,7 @@ def fetch_stock_portfolio(company):
 def home():
     """
     """
-    return render_template('home.html', msg='Brr...')
+    return render_template('home.html', msg='Welcome to the site!')
 
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -65,6 +66,7 @@ def city_search():
 
     form = StockSearchForm()
 
+    # TO CHECK 1) IF THE METHOD IS POST, AND 2) IF THE DATA UPDATED IN THE FORM IS VALID:
     if form.validate_on_submit():
         company = form.data['company_name']
 
@@ -74,6 +76,19 @@ def city_search():
             session['context'] = res.text
             # return render_template('home.html', msg='Search Result Found.')
             return redirect(url_for('.city_detail'))
+
+            # data = json.loads(res.text)
+            # company = {
+            #     'symbol': data['symbol'],
+            #     'CEO': data['CEO'],
+            # }
+            # new_company = Company(**company)
+
+            # db.session.add(new_company)
+            # db.session.commit()
+
+            # return redirect(url_for('.portfolio_detail'))
+
 
         except JSONDecodeError:
             abort(404)

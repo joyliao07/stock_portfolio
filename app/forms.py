@@ -11,14 +11,14 @@ class CitySearchForm(FlaskForm):
     """
     Eentsy Weentsy Form that has a single, required 'name' field
     """
-    city_name = StringField('namexxx', validators=[DataRequired()])
+    city_name = StringField('company symbol', validators=[DataRequired()])
 
 
 class StockSearchForm(FlaskForm):
     """
     Form to search on IEX.
     """
-    company_name = StringField('namexxx', validators=[DataRequired()])
+    company_name = StringField('company symbol', validators=[DataRequired()])
 
 
 
