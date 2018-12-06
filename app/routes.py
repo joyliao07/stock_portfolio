@@ -28,8 +28,7 @@ import os
 def fetch_stock_portfolio(company):
     """
     """
-    # return req.get(f"{os.getenv('API_URL')}{city}&APPID={os.getenv('API_KEY')}")
-    return req.get(f"https://api.iextrading.com/1.0/stock/aapl/book")
+    return req.get(f"{os.getenv('API_URL')}{company}/book")
 
 
 ###############
