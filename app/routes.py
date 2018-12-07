@@ -5,11 +5,9 @@ from flask import render_template, abort, redirect, url_for, session, g, make_re
 from sqlalchemy.exc import IntegrityError
 
 # Models
-from .models import db, City
-# from .models import Company, db
+from .models import Company, db
 
 # Forms
-from .forms import CitySearchForm
 from .forms import StockSearchForm
 
 # API Requests & Other
@@ -21,15 +19,10 @@ import os
 # helpers
 
 
-# def fetch_city_weather(city):
-#     """
-#     """
-#     return req.get(f"{os.getenv('API_URL')}{city}&APPID={os.getenv('API_KEY')}")
-
 def fetch_stock_portfolio(company):
     """
     """
-    return req.get(f"{os.getenv('API_URL')}{company}/book")
+    return req.get(f'https://api.iextrading.com/1.0/stock/{ company }/company')
 
 
 ###############
@@ -45,107 +38,77 @@ def home():
 
 
 @app.route('/search', methods=['GET', 'POST'])
-def city_search():
+def company_search():
     """Proxy endpoint for retrieving city information from a 3rd party API.
     """
-    # form = CitySearchForm()
-
-    # if form.validate_on_submit():
-    #     city = form.data['city_name']
-
-    #     res = fetch_city_weather(city)
-
-    #     try:
-    #         session['context'] = res.text
-    #         return redirect(url_for('.city_detail'))
-
-    #     except JSONDecodeError:
-    #         abort(404)
-
-    # return render_template('search.html', form=form)
 
     form = StockSearchForm()
 
     # TO CHECK 1) IF THE METHOD IS POST, AND 2) IF THE DATA UPDATED IN THE FORM IS VALID:
     if form.validate_on_submit():
-        company = form.data['company_name']
-
+        company = form.data['symbol']
         res = fetch_stock_portfolio(company)
 
         try:
-            session['context'] = res.text
-            # return render_template('home.html', msg='Search Result Found.')
-            return redirect(url_for('.city_detail'))
+            data = json.loads(res.text)
+            print('data: ', data)
 
-            # data = json.loads(res.text)
-            # company = {
-            #     'symbol': data['symbol'],
-            #     'CEO': data['CEO'],
-            # }
-            # new_company = Company(**company)
+            company = {
+                'symbol': data['symbol'],
+                'companyName': data['companyName'],
+                'exchange': data['exchange'],
+                'industry': data['industry'],
+                'website': data['website'],
+                'description': data['description'],
+                'CEO': data['CEO'],
+                'issueType': data['issueType'],
+                'sector': data['sector'],
+            }
+            print('company: ', company)
 
-            # db.session.add(new_company)
-            # db.session.commit()
+            new_company = Company(**company)
+            db.session.add(new_company)
+            db.session.commit()
 
-            # return redirect(url_for('.portfolio_detail'))
-
+            return redirect(url_for('.portfolio_detail'))
 
         except JSONDecodeError:
+            print('Json Decode')
             abort(404)
 
     return render_template('search.html', form=form)
 
-@app.route('/city')
-@app.route('/city/<company_name>')
-def city_detail(company_name=None):
+# @app.route('/city')
+# @app.route('/city/<symbol>')
+# def portfolio_detail(symbol=None):
 
-    if company_name:
-        res = fetch_stock_portfolio(company_name)
-        return render_template('city_detail.html', **res.json())
+#     if symbol:
+#         res = fetch_stock_portfolio(symbol)
+#         return render_template('portfolio_detail.html', **res.json())
 
-    else:
+#     else:
 
-        try:
-            context = json.loads(session['context'])
-            city = City(cityName=context['quote']['companyName'])
-            print(context)
-            # print('city', city)
-            # db.session.add(city)
-            # db.session.commit()
-            # return render_template('city_detail.html', **context)
-            # return redirect(......)
-            # return redirect('stock_detail.html', **res.json())
-            return redirect(url_for('.portfolio'))
-            return 'temp'
-        except IntegrityError as e:
-            print(e)
-            res = make_response('That city already added :(', 400)
-            return res
+#         try:
+#             context = json.loads(session['context'])
+#             city = City(cityName=context['quote']['companyName'])
+#             print(context)
+#             # print('city', city)
+#             # db.session.add(city)
+#             # db.session.commit()
+#             # return render_template('portfolio_detail.html', **context)
+#             # return redirect(......)
+#             # return redirect('stock_detail.html', **res.json())
+#             return redirect(url_for('.portfolio'))
+#             return 'temp'
+#         except IntegrityError as e:
+#             print(e)
+#             res = make_response('That city already added :(', 400)
+#             return res
 
 
 @app.route('/portfolio', methods=['GET', 'POST'])
-def portfolio():
+def portfolio_detail():
     """Proxy endpoint for retrieving stock information from a 3rd party API.
     """
 
     return render_template('portfolio.html')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
