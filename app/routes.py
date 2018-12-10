@@ -51,7 +51,6 @@ def company_search():
 
         try:
             data = json.loads(res.text)
-            print('data: ', data)
 
             company = {
                 'symbol': data['symbol'],
@@ -68,7 +67,9 @@ def company_search():
 
             new_company = Company(**company)
             db.session.add(new_company)
+            print('Log: Before db.session.commit.')
             db.session.commit()
+            print('Log: After db.session.commit.')
 
             return redirect(url_for('.portfolio_detail'))
 
