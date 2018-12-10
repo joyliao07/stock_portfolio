@@ -34,7 +34,7 @@ def fetch_stock_portfolio(company):
 def home():
     """
     """
-    return render_template('home.html', msg='Welcome to the site!')
+    return render_template('home.html', msg='Welcome to the site')
 
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -67,14 +67,12 @@ def company_search():
 
             new_company = Company(**company)
             db.session.add(new_company)
-            print('Log: Before db.session.commit.')
             db.session.commit()
-            print('Log: After db.session.commit.')
 
             return redirect(url_for('.portfolio_detail'))
 
         except JSONDecodeError:
-            print('Json Decode')
+            # print('Json Decode')
             abort(404)
 
     return render_template('search.html', form=form)
@@ -111,5 +109,6 @@ def company_search():
 def portfolio_detail():
     """Proxy endpoint for retrieving stock information from a 3rd party API.
     """
+
 
     return render_template('portfolio.html')
