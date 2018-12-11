@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Search for Stock Portfolio</h2>
+<h2>Search for stocks</h2>
 <form method="POST" action="/search">
   {{ form.csrf_token }}
   {{ form.symbol.label }} {{ form.symbol(size=20) }}

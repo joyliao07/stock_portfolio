@@ -1,7 +1,8 @@
+"""This module defines the routes of stocks app."""
 from . import app
 
 # 3rd Party Requirements
-from flask import render_template, abort, redirect, url_for, session, g, make_response
+from flask import render_template, abort, redirect, url_for, session, g, make_response, request
 from sqlalchemy.exc import IntegrityError
 
 # Models
@@ -18,10 +19,8 @@ import os
 
 # helpers
 
-
 def fetch_stock_portfolio(company):
-    """
-    """
+    """To fetch the return from IEX website."""
     return req.get(f'https://api.iextrading.com/1.0/stock/{ company }/company')
 
 
@@ -32,26 +31,22 @@ def fetch_stock_portfolio(company):
 
 @app.route('/')
 def home():
-    """
-    """
-    return render_template('home.html', msg='Welcome to the site!')
+    """To setup the home route."""
+    return render_template('home.html', msg='Welcome to the site')
 
 
 @app.route('/search', methods=['GET', 'POST'])
 def company_search():
-    """Proxy endpoint for retrieving city information from a 3rd party API.
-    """
+    """Proxy endpoint for retrieving city information from a 3rd party API."""
 
     form = StockSearchForm()
 
-    # TO CHECK 1) IF THE METHOD IS POST, AND 2) IF THE DATA UPDATED IN THE FORM IS VALID:
-    if form.validate_on_submit():
+    if request.method == 'POST':
         company = form.data['symbol']
         res = fetch_stock_portfolio(company)
 
         try:
             data = json.loads(res.text)
-            print('data: ', data)
 
             company = {
                 'symbol': data['symbol'],
@@ -108,7 +103,5 @@ def company_search():
 
 @app.route('/portfolio', methods=['GET', 'POST'])
 def portfolio_detail():
-    """Proxy endpoint for retrieving stock information from a 3rd party API.
-    """
-
+    """Proxy endpoint for retrieving stock information from a 3rd party API."""
     return render_template('portfolio.html')

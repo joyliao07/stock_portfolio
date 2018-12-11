@@ -18,6 +18,8 @@ migrate = Migrate(app, db)
 # `flask db migrate -m 'migration message'` - creates migrations and preps DB
 # `flask db upgrade` - creates tables
 
+# temporarily remove "unique=True" from symbol and companyName?? Doesn't work
+
 
 class Company(db.Model):
     __tablename__ = 'companies'
