@@ -39,8 +39,9 @@ def test_home_route_delete():
 # def test_portfolio_route_get():
 #     """To test portfolio return a 200 status code."""
 #     rv = app.test_client().get('/portfolio')
+#     import pdb; pdb.set_trace()
 #     assert rv.status_code == 200
-#     assert b'<h2>Welcome to the Portfolio</h2>' in rv.data
+    # assert b'<h2>Welcome to the Portfolio</h2>' in rv.data
 
 
 def test_search_route_get():
@@ -53,7 +54,7 @@ def test_search_route_get():
 def test_search_post_pre_redirect(client):
     """To test search's redirect before redict, returns a 302 status code."""
     rv = client.post('/search', data={'symbol': 'amzn'})
-    assert rv.status_code == 200
+    assert rv.status_code == 302
 
 
 def test_search_post(client):
@@ -65,5 +66,19 @@ def test_search_post(client):
 
 def test_bunk_symbol(client):
     """To test an empty sumbol returns a 404 status code."""
-    rv = client.post('/search', data={'symbol': ''}, follow_redirects=True)
+    rv = client.post('/search', data={'symbol': 'wwwwwwwww'}, follow_redirects=True)
     assert rv.status_code == 404
+
+
+def test_data_already_existed(client):
+    """To test data already existed."""
+    rv_1 = client.post('/search', data={'symbol': 'appl'}, follow_redirects=True)
+    rv_2 = client.post('/search', data={'symbol': 'appl'}, follow_redirects=True)
+    assert f'That city already added :('
+    assert rv_2.status_code == 404
+
+
+
+
+
+
