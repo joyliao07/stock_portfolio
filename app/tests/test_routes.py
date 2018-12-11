@@ -47,14 +47,13 @@ def test_search_route_get():
 
 def test_search_post_pre_redirect(client):
     rv = client.post('/search', data={'symbol': 'amzn'})
-    assert rv.status_code == 200
-    #WE HAVE 200 HERE, NOT 302 REDIRECT
+    assert rv.status_code == 302
 
 
 def test_search_post(client):
     rv = client.post('/search', data={'symbol': 'amzn'}, follow_redirects=True)
     assert rv.status_code == 200
-    # assert b'<h2>Welcome to the Portfolio</h2>' in rv.data
+    assert b'<h2>Welcome to the Portfolio</h2>' in rv.data
 
 
 def test_bunk_symbol(client):

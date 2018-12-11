@@ -1,7 +1,7 @@
 from . import app
 
 # 3rd Party Requirements
-from flask import render_template, abort, redirect, url_for, session, g, make_response
+from flask import render_template, abort, redirect, url_for, session, g, make_response, request
 from sqlalchemy.exc import IntegrityError
 
 # Models
@@ -45,7 +45,7 @@ def company_search():
     form = StockSearchForm()
 
     # TO CHECK 1) IF THE METHOD IS POST, AND 2) IF THE DATA UPDATED IN THE FORM IS VALID:
-    if form.validate_on_submit():
+    if request.method == 'POST':
         company = form.data['symbol']
         res = fetch_stock_portfolio(company)
 
@@ -72,7 +72,7 @@ def company_search():
             return redirect(url_for('.portfolio_detail'))
 
         except JSONDecodeError:
-            # print('Json Decode')
+            print('Json Decode')
             abort(404)
 
     return render_template('search.html', form=form)
