@@ -43,33 +43,12 @@ def company_search():
 
     if request.method == 'POST':
         company = form.data['symbol']
-        res = fetch_stock_portfolio(company)
 
         try:
+            res = fetch_stock_portfolio(company)
             session['context'] = res.text
-            return redirect(url_for('.portfolio_detail'))
 
-        except JSONDecodeError:
-            print('Json Decode')
-            abort(404)
-
-    return render_template('search.html', form=form)
-
-
-@app.route('/portfolio')
-@app.route('/portfolio/<symbol>')
-def portfolio_detail(symbol=None):
-    """Proxy endpoint for retrieving stock information from a 3rd party API."""
-
-    if symbol:
-        pass
-        res = fetch_stock_portfolio(symbol)
-        print('the first category')
-        return render_template('portfolio_detail.html', **res.json())
-
-    else:
-        try:
-            print('the second category')
+            #below lines to validate the result of "res"
             data = json.loads(session['context'])
             company = {
                 'symbol': data['symbol'],
@@ -82,13 +61,42 @@ def portfolio_detail(symbol=None):
                 'issueType': data['issueType'],
                 'sector': data['sector'],
             }
-            new_company = Company(**company)
-            db.session.add(new_company)
-            db.session.commit()
 
-            return render_template('portfolio.html', company=company)
+            return redirect(url_for('.portfolio_detail'))
 
-        except IntegrityError as e:
-            print(e)
-            res = make_response('That city already added :(', 400)
-            return res
+        except JSONDecodeError:
+            print('hitting the empty symbol 404')
+            print('Json Decode')
+            abort(404)
+
+    return render_template('search.html', form=form)
+
+
+@app.route('/portfolio')
+@app.route('/portfolio/<symbol>')
+def portfolio_detail(symbol=None):
+    """Proxy endpoint for retrieving stock information from a 3rd party API."""
+
+    try:
+        print('the second category')
+        data = json.loads(session['context'])
+        company = {
+            'symbol': data['symbol'],
+            'companyName': data['companyName'],
+            'exchange': data['exchange'],
+            'industry': data['industry'],
+            'website': data['website'],
+            'description': data['description'],
+            'CEO': data['CEO'],
+            'issueType': data['issueType'],
+            'sector': data['sector'],
+        }
+        new_company = Company(**company)
+        db.session.add(new_company)
+        db.session.commit()
+
+        return render_template('portfolio.html', company=company)
+    except IntegrityError as e:
+        print(e)
+        res = make_response('That city already added :(', 400)
+        return res
