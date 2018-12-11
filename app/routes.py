@@ -59,13 +59,12 @@ def company_search():
                 'issueType': data['issueType'],
                 'sector': data['sector'],
             }
-            print('company: ', company)
 
             new_company = Company(**company)
             db.session.add(new_company)
             db.session.commit()
 
-            return redirect(url_for('.portfolio_detail'))
+            return render_template('portfolio.html', company=company)
 
         except JSONDecodeError:
             print('Json Decode')
@@ -73,35 +72,28 @@ def company_search():
 
     return render_template('search.html', form=form)
 
-# @app.route('/city')
-# @app.route('/city/<symbol>')
-# def portfolio_detail(symbol=None):
 
+# @app.route('/portfolio', methods=['GET', 'POST'])
+# def portfolio_detail(symbol=None):
+#     """Proxy endpoint for retrieving stock information from a 3rd party API."""
+#     print('symbol in portfolio: ', symbol)
 #     if symbol:
 #         res = fetch_stock_portfolio(symbol)
+#         print('the first category')
 #         return render_template('portfolio_detail.html', **res.json())
 
 #     else:
-
 #         try:
+#             print('the second category')
+#             res = fetch_stock_portfolio(symbol)
+#             session['context'] = res.text
 #             context = json.loads(session['context'])
-#             city = City(cityName=context['quote']['companyName'])
-#             print(context)
-#             # print('city', city)
-#             # db.session.add(city)
-#             # db.session.commit()
-#             # return render_template('portfolio_detail.html', **context)
-#             # return redirect(......)
-#             # return redirect('stock_detail.html', **res.json())
-#             return redirect(url_for('.portfolio'))
-#             return 'temp'
+#             company = Company(symbol=context['symbol'])
+#             # print('company', company) is None
+#             return render_template('portfolio.html', **context)
 #         except IntegrityError as e:
 #             print(e)
 #             res = make_response('That city already added :(', 400)
 #             return res
 
-
-@app.route('/portfolio', methods=['GET', 'POST'])
-def portfolio_detail():
-    """Proxy endpoint for retrieving stock information from a 3rd party API."""
-    return render_template('portfolio.html')
+#     return render_template('portfolio.html')
