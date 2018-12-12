@@ -1,10 +1,9 @@
-from . import app
 
 # DB-Related Imports
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-
 from datetime import datetime as dt
+from flask_migrate import Migrate
+from . import app
 
 
 db = SQLAlchemy(app)
@@ -25,8 +24,8 @@ class Company(db.Model):
     __tablename__ = 'companies'
 
     id = db.Column(db.Integer, primary_key=True)
-    symbol = db.Column(db.String(64), index=True, unique=True)
-    companyName = db.Column(db.String(256), index=True, unique=True)
+    symbol = db.Column(db.String(64), index=True)
+    companyName = db.Column(db.String(256), index=True)
     exchange = db.Column(db.String(128))
     industry = db.Column(db.String(128))
     website = db.Column(db.String(128))

@@ -13,10 +13,14 @@ class StockSearchForm(FlaskForm):
     """
     Form to search on IEX.
     """
-    symbol = StringField('company symbol', validators=[DataRequired()])
+    symbol = StringField('Company Symbol', validators=[DataRequired()])
 
 
-
+class CompanyAddForm(FlaskForm):
+    """
+    """
+    symbol = StringField('Company Symbol', validators=[DataRequired()])
+    name = StringField('Company', validators=[DataRequired()])
 
 
 
