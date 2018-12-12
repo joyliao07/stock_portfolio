@@ -2,14 +2,14 @@
 from . import app
 
 # 3rd Party Requirements
-from flask import render_template, abort, redirect, url_for, session, g, make_response, request
-from sqlalchemy.exc import IntegrityError
+from flask import render_template, abort, redirect, url_for, session, g, make_response, request, flash, session
+from sqlalchemy.exc import IntegrityError, DBAPIError
 
 # Models
 from .models import Company, db
 
 # Forms
-from .forms import StockSearchForm
+from .forms import StockSearchForm, CompanyAddForm
 
 # API Requests & Other
 from json import JSONDecodeError
@@ -52,17 +52,10 @@ def company_search():
             data = json.loads(session['context'])
             company = {
                 'symbol': data['symbol'],
-                'companyName': data['companyName'],
-                'exchange': data['exchange'],
-                'industry': data['industry'],
-                'website': data['website'],
-                'description': data['description'],
-                'CEO': data['CEO'],
-                'issueType': data['issueType'],
-                'sector': data['sector'],
             }
 
-            return redirect(url_for('.portfolio_detail'))
+            # return redirect(url_for('.portfolio_detail'))
+            return redirect(url_for('.preview_company'))
 
         except JSONDecodeError:
             print('hitting the empty symbol 404')
@@ -72,31 +65,93 @@ def company_search():
     return render_template('search.html', form=form)
 
 
+
+@app.route('/preview', methods=['GET', 'POST'])
+def preview_company():
+    """
+    """
+    decoded = json.loads(session['context'])
+
+    form_context = {
+        'symbol': decoded['symbol'],
+        'name': decoded['companyName'],
+    }
+
+    form = CompanyAddForm(**form_context)
+
+    if form.validate_on_submit():
+        try:
+            data = json.loads(session['context'])
+            company = {
+                'symbol': data['symbol'],
+                'companyName': data['companyName'],
+                'exchange': data['exchange'],
+                'industry': data['industry'],
+                'website': data['website'],
+                'description': data['description'],
+                'CEO': data['CEO'],
+                'issueType': data['issueType'],
+                'sector': data['sector'],
+            }
+            new_company = Company(**company)
+            db.session.add(new_company)
+            db.session.commit()
+        except (DBAPIError, IntegrityError):
+            flash('Oops. Something went wrong with your search.')
+            return render_template('search.html', form=form)
+
+        return redirect(url_for('.portfolio_detail'))
+
+    return render_template(
+        'preview.html',
+        form=form,
+        symbol=form_context['symbol'],
+        name=form_context['name'],
+    )
+
+
 @app.route('/portfolio')
 @app.route('/portfolio/<symbol>')
-def portfolio_detail(symbol=None):
+def portfolio_detail():
     """Proxy endpoint for retrieving stock information from a 3rd party API."""
+    company = Company.query.all()
+    return render_template('portfolio.html', company=company)
 
-    try:
-        print('the second category')
-        data = json.loads(session['context'])
-        company = {
-            'symbol': data['symbol'],
-            'companyName': data['companyName'],
-            'exchange': data['exchange'],
-            'industry': data['industry'],
-            'website': data['website'],
-            'description': data['description'],
-            'CEO': data['CEO'],
-            'issueType': data['issueType'],
-            'sector': data['sector'],
-        }
-        new_company = Company(**company)
-        db.session.add(new_company)
-        db.session.commit()
 
-        return render_template('portfolio.html', company=company)
-    except IntegrityError as e:
-        print(e)
-        res = make_response('That city already added :(', 400)
-        return res
+
+
+
+
+
+
+
+
+
+# @app.route('/portfolio')
+# @app.route('/portfolio/<symbol>')
+# def portfolio_detail(symbol=None):
+#     """Proxy endpoint for retrieving stock information from a 3rd party API."""
+
+#     try:
+
+#         data = json.loads(session['context'])
+#         company = {
+#             'symbol': data['symbol'],
+#             'companyName': data['companyName'],
+#             'exchange': data['exchange'],
+#             'industry': data['industry'],
+#             'website': data['website'],
+#             'description': data['description'],
+#             'CEO': data['CEO'],
+#             'issueType': data['issueType'],
+#             'sector': data['sector'],
+#         }
+#         new_company = Company(**company)
+#         db.session.add(new_company)
+#         db.session.commit()
+
+#         return render_template('portfolio.html', company=company)
+#     except IntegrityError as e:
+#         print(e)
+#         res = make_response('That comapny already added :(', 400)
+#         return res

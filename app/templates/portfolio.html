@@ -1,28 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Welcome to the Portfolio</h2>
+<div class="container">
+  <h2>Welcome to the Portfolio</h2>
 
-
-<p> Company Symbol: {{company['symbol']}} </p>
-<p> Company Name: {{company['companyName']}} </p>
-<p> Company Exchange: {{company['exchange']}} </p>
-<p> Company Industry: {{company['industry']}} </p>
-<p> Company Website: {{company['website']}} </p>
-<p> Company Description: {{company['description']}} </p>
-<p> Company CEO: {{company['CEO']}} </p>
-<p> Company Issue Type: {{company['issueType']}} </p>
-<p> Company Sector: {{company['sector']}} </p>
-
-
-{% endblock %}
-
-
-
-
-
-
-
-
-
-
+  {% for company in company %}
+    <div class="city">
+      <p>symbol: {{ company.symbol }}</p>
+      <p>name: {{ company.companyName }}</p>
+      <p>exchange: {{ company.exchange }}</p>
+      <p>industry: {{ company.industry }}</p>
+      <p>website: {{ company.website }}</p>
+      <p>description: {{ company.description }}</p>
+      <p>CEO: {{ company.CEO }}</p>
+      <p>issueType: {{ company.issueType }}</p>
+      <p>sector: {{ company.sector }}</p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock content %}
