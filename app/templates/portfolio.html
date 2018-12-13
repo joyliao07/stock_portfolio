@@ -4,18 +4,29 @@
 <div class="container">
   <h2>Welcome to the Portfolio</h2>
 
-  {% for company in company %}
-    <div class="city">
-      <p>symbol: {{ company.symbol }}</p>
-      <p>name: {{ company.companyName }}</p>
-      <p>exchange: {{ company.exchange }}</p>
-      <p>industry: {{ company.industry }}</p>
-      <p>website: {{ company.website }}</p>
-      <p>description: {{ company.description }}</p>
-      <p>CEO: {{ company.CEO }}</p>
-      <p>issueType: {{ company.issueType }}</p>
-      <p>sector: {{ company.sector }}</p>
-    </div>
-  {% endfor %}
+  <div>
+    <h3>Create a new Portfolio!</h3>
+    <form action="{{ url_for(".portfolio_detail") }}" method="POST">
+      {{ form.hidden_tag() }}
+      {{ form.name.label }}{{ form.name(size=20) }}
+      <input type="submit" name="create_category" id="create_category" value="Go">
+    </form>
+  </div>
+
+  <div>
+    {% for company in company %}
+      <div class="city">
+        <p>symbol: {{ company.symbol }}</p>
+        <p>name: {{ company.companyName }}</p>
+        <p>exchange: {{ company.exchange }}</p>
+        <p>industry: {{ company.industry }}</p>
+        <p>website: {{ company.website }}</p>
+        <p>description: {{ company.description }}</p>
+        <p>CEO: {{ company.CEO }}</p>
+        <p>issueType: {{ company.issueType }}</p>
+        <p>sector: {{ company.sector }}</p>
+      </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock content %}
