@@ -23,6 +23,13 @@ class CompanyAddForm(FlaskForm):
     symbol = StringField('Company Symbol', validators=[DataRequired()])
     name = StringField('Company', validators=[DataRequired()])
     portfolios = SelectField('portfolios')
+    exchange = StringField('exchange', validators=[DataRequired()])
+    industry = StringField('industry', validators=[DataRequired()])
+    website = StringField('website', validators=[DataRequired()])
+    description = StringField('description', validators=[DataRequired()])
+    CEO = StringField('CEO', validators=[DataRequired()])
+    issueType = StringField('issueType', validators=[DataRequired()])
+    sector = StringField('sector', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

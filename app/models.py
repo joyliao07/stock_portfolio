@@ -17,7 +17,7 @@ migrate = Migrate(app, db)
 # `flask db migrate -m 'migration message'` - creates migrations and preps DB
 # `flask db upgrade` - creates tables
 
-# temporarily remove "unique=True" from symbol and companyName?? Doesn't work
+# temporarily remove "unique=True" from symbol and companyName??
 
 
 class Company(db.Model):
@@ -25,8 +25,8 @@ class Company(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     portfolio_id = db.Column(db.ForeignKey('portfolios.id'), nullable=False)
-    symbol = db.Column(db.String(64), index=True)
-    companyName = db.Column(db.String(256), index=True)
+    symbol = db.Column(db.String(64), index=True, unique=True)
+    companyName = db.Column(db.String(256), index=True, unique=True)
     exchange = db.Column(db.String(128))
     industry = db.Column(db.String(128))
     website = db.Column(db.String(128))

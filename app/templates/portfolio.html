@@ -16,6 +16,8 @@
   <div>
     {% for company in company %}
       <div class="city">
+
+        <p>portfolio_id: {{ company.portfolio_id }}</p>
         <p>symbol: {{ company.symbol }}</p>
         <p>name: {{ company.companyName }}</p>
         <p>exchange: {{ company.exchange }}</p>
@@ -25,6 +27,7 @@
         <p>CEO: {{ company.CEO }}</p>
         <p>issueType: {{ company.issueType }}</p>
         <p>sector: {{ company.sector }}</p>
+
       </div>
     {% endfor %}
   </div>

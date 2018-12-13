@@ -60,6 +60,7 @@ def company_search():
             data = json.loads(session['context'])
             company = {
                 'symbol': data['symbol'],
+
             }
 
             return redirect(url_for('.preview_company'))
@@ -78,39 +79,37 @@ def preview_company():
     """
     """
     decoded = json.loads(session['context'])
-    print('hitting /preview.')
 
     form_context = {
         'symbol': decoded['symbol'],
         'name': decoded['companyName'],
+        'exchange': decoded['exchange'],
+        'industry': decoded['industry'],
+        'website': decoded['website'],
+        'description': decoded['description'],
+        'CEO': decoded['CEO'],
+        'issueType': decoded['issueType'],
+        'sector': decoded['sector'],
     }
 
     form = CompanyAddForm(**form_context)
 
-    # import pdb; pdb.set_trace()
     if form.validate_on_submit():
-        print('hitting /preview if form validate on submit.')
         try:
-            print('hitting /preview try .')
             company = Company(
-                name=form.data['name']
+                symbol=form.data['symbol'],
+                companyName=form.data['name'],
+                exchange=form.data['exchange'],
+                industry=form.data['industry'],
+                website=form.data['website'],
+                description=form.data['description'],
+                CEO=form.data['CEO'],
+                issueType=form.data['issueType'],
+                sector=form.data['sector'],
+                portfolio_id=form.data['portfolios'],
             )
-            import pdb; pdb.set_trace()
 
-            # data = json.loads(session['context'])
-            # company = {
-            #     'symbol': data['symbol'],
-            #     'companyName': data['companyName'],
-            #     'exchange': data['exchange'],
-            #     'industry': data['industry'],
-            #     'website': data['website'],
-            #     'description': data['description'],
-            #     'CEO': data['CEO'],
-            #     'issueType': data['issueType'],
-            #     'sector': data['sector'],
-            # }
-            new_company = Company(**company)
-            db.session.add(new_company)
+            db.session.add(company)
             db.session.commit()
         except (DBAPIError, IntegrityError):
             flash('Oops. Something went wrong with your search.')
@@ -118,17 +117,22 @@ def preview_company():
 
         return redirect(url_for('.portfolio_detail'))
 
-    print('hitting /preview else in the bottom .')
     return render_template(
         'preview.html',
         form=form,
         symbol=form_context['symbol'],
         name=form_context['name'],
+        exchange=form_context['exchange'],
+        industry=form_context['industry'],
+        website=form_context['website'],
+        description=form_context['description'],
+        CEO=form_context['CEO'],
+        issueType=form_context['issueType'],
+        sector=form_context['sector'],
     )
 
-
-@app.route('/portfolio')
-@app.route('/portfolio/<symbol>')
+@app.route('/portfolio', methods=['GET', 'POST'])
+@app.route('/portfolio/<symbol>', methods=['GET', 'POST'])
 def portfolio_detail():
     """Proxy endpoint for retrieving stock information from a 3rd party API."""
 
@@ -142,8 +146,10 @@ def portfolio_detail():
         except (DBAPIError, IntegrityError):
             flash('Oops. Something went wrong with your Portfolio Form.')
             return render_template('portfolio.html', form=form)
-
+        print('hit right before company_search')
         return redirect(url_for('.company_search'))
 
     company = Company.query.all()
+
+
     return render_template('portfolio.html', form=form, company=company)
