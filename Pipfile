@@ -15,6 +15,7 @@ flask-wtf = "*"
 python-dotenv = "*"
 pytest = "*"
 coverage = "*"
+wtforms = "*"
 
 [requires]
 python_version = "3.6"

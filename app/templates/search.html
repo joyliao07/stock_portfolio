@@ -1,13 +1,19 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-<h2>Search for stocks</h2>
-<form method="POST" action="/search">
-  {{ form.csrf_token }}
-  {{ form.symbol.label }} {{ form.symbol(size=20) }}
-  <input type="submit" value="Go">
-</form>
-{% endblock %}
-
-
+  {% if get_portfolios() %}
+    <div class="container">
+      <h2>Search for stocks</h2>
+      <form method="POST" action="/search">
+        {{ form.hidden_tag() }}
+        {{ form.symbol.label }}{{ form.symbol(size=20) }}
+        <input type="submit" value="Go">
+      </form>
+    </div>
+  {% else %}
+    <div class="container">
+      <h3>Please create a Portfolio <a href="{{ url_for(".portfolio_detail") }}">here</a></h3>
+    </div>
+  {% endif %}
+{% endblock content %}
 
