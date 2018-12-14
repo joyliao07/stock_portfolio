@@ -2,9 +2,9 @@
 
 {% block content %}
 <div class="container">
-  <h2>Welcome to the Portfolio</h2>
+  <h2 class="portfolio-create-new">Welcome to the Portfolio</h2>
 
-  <div>
+  <div class="portfolio-create-new">
     <h3>Create a new Portfolio!</h3>
     <form action="{{ url_for(".portfolio_detail") }}" method="POST">
       {{ form.hidden_tag() }}

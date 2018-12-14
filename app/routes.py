@@ -60,15 +60,11 @@ def company_search():
 
             #below lines to validate the result of "res"
             data = json.loads(session['context'])
-            company = {
-                'symbol': data['symbol'],
-
-            }
+            company = {'symbol': data['symbol']}
 
             return redirect(url_for('.preview_company'))
 
         except JSONDecodeError:
-            print('hitting the empty symbol 404')
             print('Json Decode')
             abort(404)
 
@@ -114,9 +110,10 @@ def preview_company():
 
             db.session.add(company)
             db.session.commit()
+
         except (DBAPIError, IntegrityError):
             flash('Oops. Something went wrong with your search.')
-            return render_template('search.html', form=form)
+            return redirect(url_for('.company_search'))
 
         return redirect(url_for('.portfolio_detail'))
 
@@ -150,11 +147,7 @@ def portfolio_detail():
         except (DBAPIError, IntegrityError):
             flash('Oops. Something went wrong with your Portfolio Form.')
             return render_template('portfolio.html', form=form)
-        print('hit right before company_search')
         return redirect(url_for('.company_search'))
-
-    # company = Company.query.all()
-    # return render_template('portfolio.html', form=form, company=company)
 
     user_portfolios = Portfolio.query.filter(Portfolio.user_id == g.user.id).all()
     port_ids = [c.id for c in user_portfolios]
