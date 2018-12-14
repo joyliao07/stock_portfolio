@@ -1,8 +1,9 @@
 """This module defines the routes of stocks app."""
 from . import app
+from .auth import login_required
 
 # 3rd Party Requirements
-from flask import render_template, abort, redirect, url_for, session, g, make_response, request, flash, session
+from flask import render_template, abort, redirect, url_for, session, g, request, flash, session
 from sqlalchemy.exc import IntegrityError, DBAPIError
 
 # Models
@@ -29,7 +30,7 @@ def fetch_stock_portfolio(company):
 def get_portfolios():
     """
     """
-    return Portfolio.query.all()
+    return Portfolio.query.filter_by(user_id=g.user.id).all()
 
 
 ###############
@@ -44,6 +45,7 @@ def home():
 
 
 @app.route('/search', methods=['GET', 'POST'])
+@login_required
 def company_search():
     """Proxy endpoint for retrieving city information from a 3rd party API."""
 
@@ -75,6 +77,7 @@ def company_search():
 
 
 @app.route('/preview', methods=['GET', 'POST'])
+@login_required
 def preview_company():
     """
     """
@@ -133,6 +136,7 @@ def preview_company():
 
 @app.route('/portfolio', methods=['GET', 'POST'])
 @app.route('/portfolio/<symbol>', methods=['GET', 'POST'])
+@login_required
 def portfolio_detail():
     """Proxy endpoint for retrieving stock information from a 3rd party API."""
 
@@ -140,7 +144,7 @@ def portfolio_detail():
 
     if form.validate_on_submit():
         try:
-            portfolio = Portfolio(name=form.data['name'])
+            portfolio = Portfolio(name=form.data['name'], user_id=g.user.id)
             db.session.add(portfolio)
             db.session.commit()
         except (DBAPIError, IntegrityError):
@@ -149,7 +153,11 @@ def portfolio_detail():
         print('hit right before company_search')
         return redirect(url_for('.company_search'))
 
-    company = Company.query.all()
+    # company = Company.query.all()
+    # return render_template('portfolio.html', form=form, company=company)
 
+    user_portfolios = Portfolio.query.filter(Portfolio.user_id == g.user.id).all()
+    port_ids = [c.id for c in user_portfolios]
 
-    return render_template('portfolio.html', form=form, company=company)
+    companies = Company.query.filter(Company.portfolio_id.in_(port_ids)).all()
+    return render_template('portfolio.html', companies=companies, form=form)
