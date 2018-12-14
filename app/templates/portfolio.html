@@ -2,9 +2,9 @@
 
 {% block content %}
 <div class="container">
-  <h2>Welcome to the Portfolio</h2>
+  <h2 class="portfolio-create-new">Welcome to the Portfolio</h2>
 
-  <div>
+  <div class="portfolio-create-new">
     <h3>Create a new Portfolio!</h3>
     <form action="{{ url_for(".portfolio_detail") }}" method="POST">
       {{ form.hidden_tag() }}
@@ -14,9 +14,9 @@
   </div>
 
   <div>
-    {% for company in company %}
+    {% for company in companies %}
       <div class="city">
-
+        <h2>{{ company.portfolio.name }}</h2>
         <p>portfolio_id: {{ company.portfolio_id }}</p>
         <p>symbol: {{ company.symbol }}</p>
         <p>name: {{ company.companyName }}</p>

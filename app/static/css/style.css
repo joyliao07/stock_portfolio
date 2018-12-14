@@ -5,20 +5,62 @@ header {
 
   .main_nav a {
       text-decoration: none;
-  }
+    }
 
-  .main_nav li {
-      display: inline-block;
-  }
+    .main_nav li {
+        display: inline-block;
+    }
 
-  .main_nav li:after {
-      content: ' |';
-  }
+    .main_nav li:after {
+        content: ' |';
+    }
 
-  .main_nav ul:before {
-      content: url('../assets/dino.png');
-  }
+    .main_nav ul:before {
+        /* content: url('../assets/dino.jpg'); */
+    }
 
-  .company_labels {
-    font-weight: bold;
-  }
+    .company_labels {
+        font-weight: bold;
+    }
+
+    .home-main {
+        text-align: center;
+    }
+
+    .home-main-2 {
+        /* content: url('../assets/coin.jpg'); */
+    }
+
+    .home-h1 {
+        -webkit-animation:colorchange 4s infinite alternate;
+    }
+
+    @-webkit-keyframes colorchange {
+        0% {
+          color: rgb(22, 22, 51);
+        }
+        50% {
+          color: #7396b9;
+        }
+        100% {
+          color: pink;
+        }
+      }
+
+    .portfolio-create-new {
+        text-align: center;
+    }
+
+    .preview-text, p {
+        font-size: 30px;
+    }
+
+    .preview-text {
+        border: black solid 2px;
+        padding: 10px 30px;
+    }
+
+    .preview-label, label {
+        font-size: 25px;
+
+    }

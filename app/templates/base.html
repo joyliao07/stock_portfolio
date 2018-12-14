@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="{{ url_for("static", filename="css/normalize.css") }}">
   <link rel="stylesheet" href="{{ url_for("static", filename="css/skeleton.css") }}">
   <link rel="stylesheet" href="{{ url_for("static", filename="css/style.css") }}">
-  <link rel="icon" type="image/png" href="{{ url_for("static", filename="assets/dino.png") }}">
+  <link rel="icon" type="image/png" href="{{ url_for("static", filename="dino.png") }}">
+  <link rel="icon" type="image/png" href="{{ url_for("static", filename="coin.jpg") }}">
+  <link href="https://fonts.googleapis.com/css?family=Unlock" rel="stylesheet">
   <title>Flask Demo</title>
 </head>
 <body>
@@ -15,13 +17,24 @@
     <nav class="main_nav">
       <ul>
         <li><a href="{{ url_for(".home") }}">Home</a></li>
+        {% if g.user %}
         <li><a href="{{ url_for(".company_search") }}">Search</a></li>
+        <li><a href="{{ url_for(".portfolio_detail") }}">Portfolio</a></li>
+        <li><a href="{{ url_for(".logout") }}">Logout</a></li>
+        {% else %}
+        <li><a href="{{ url_for(".register") }}">Register</a></li>
+        <li><a href="{{ url_for(".login") }}">Login</a></li>
+        {% endif %}
       </ul>
     </nav>
   </header>
   <main>
+    {% for message in get_flashed_messages() %}
+      <div class="flashed container">{{ message }}</div>
+    {% endfor %}
+
     {% block content %}
-    <h3>No Content</h3>
+      <h3>No Content</h3>
     {% endblock content%}
   </main>
   <footer>

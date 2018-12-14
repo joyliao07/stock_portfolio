@@ -1,19 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-  <p>Symbol: {{ symbol }}</p>
-  <p>Company: {{ name }}</p>
-
+<div class="container preview">
   <form action="{{ url_for(".preview_company") }}" method="POST">
       {{ form.hidden_tag() }}
       <div class="hidden" hidden>
         {{ form.symbol.label }}{{ form.symbol(size=20) }}
       </div>
-      {{ form.portfolios.label }} {{ form.portfolios() }}
+      <div class="preview-label">
+        {{ form.portfolios.label }} {{ form.portfolios() }}
+      </div>
       <input type="submit" value="Go">
-    </form>
+  </form>
+
+  <div class="preview-text">
+    <p>Symbol: {{ symbol }}</p>
+    <p>Company: {{ name }}</p>
   </div>
+</div>
 
 {% endblock %}
 
