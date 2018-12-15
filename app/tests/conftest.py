@@ -95,6 +95,16 @@ def company(session):
     return company
 
 
+# @pytest.fixture()
+# def company_invalid(session):
+#     """
+#     """
+#     company = Company(companyName='company does not exist', symbol='xxxxxxxxxx')
+
+#     session.add(company)
+#     session.commit()
+#     return company
+
 
 
 
