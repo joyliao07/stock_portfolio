@@ -94,6 +94,9 @@ def preview_company():
     form = CompanyAddForm(**form_context)
 
     if form.validate_on_submit():
+        # THE FORM IS NEVER VALIDATED:
+        import pdb; pdb.set_trace()
+
         try:
             company = Company(
                 symbol=form.data['symbol'],
