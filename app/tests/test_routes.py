@@ -1,4 +1,5 @@
-from flask import g
+from flask import g, session
+from ..routes import fetch_stock_portfolio
 
 
 class TestClass:
@@ -92,22 +93,30 @@ class TestClass:
     #     client.post('/search')
     #     assert client.get('/preview').status_code == 200
 
-    def test_preview_post(self, app, user, portfolio, company):
-        # TO TEST ROUTES.PY LINE 80-97, 119-120
+    def test_preview_post(self, app, user, portfolio):
+        # TO TEST ROUTES.PY LINE 96 - 119, CANNOT PASS VALIDATE_ON_SUBMIT()...
 
         with app.test_client() as client:
             with client.session_transaction() as flask_session:
                 flask_session['user_id'] = user.id
                 flask_session['portfolio_id'] = portfolio.id
-                flask_session['symbol'] = company.symbol
+                flask_session['symbol'] = 'AAPL'
 
-        client.post('/search')
-        client.get('/preview')
-        client.post('/preview')
+                client.post('/search')
+                # client.post('/search') is required step before running client.get('preview'), because it saves session['context']
+
+                # MAKE THE SESSION HERE? AND PASS IN AS ... SESSION['CONTEXT']?
+                flask_session['context'] = fetch_stock_portfolio('AAPL').text
+
+                # response = client.post('/preview', data=company_add_form.data, follow_redirects=True)
+                # client.post('/preview', data={'symbol': 'appl'}, follow_redirects=True)
+
+
+
         # form is ready, but how to trigger "submit"? Duck "pytest pass submit form"
-        # https://stackoverflow.com/questions/35456771/unit-testing-a-flask-form-containing-multiple-submit-buttons
+        # https://stackoverflow.com/questions/37579411/testing-a-post-that-uses-flask-wtf-validate-on-submit
 
-        # assert client.post('/preview').status_code == 200
+
 
 
 
