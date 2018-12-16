@@ -74,3 +74,4 @@
 #     rv_2 = client.post('/search', data={'symbol': 'appl'}, follow_redirects=True)
 #     assert f'That city already added :('
 #     assert rv_2.status_code == 200
+

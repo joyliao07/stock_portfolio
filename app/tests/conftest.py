@@ -1,9 +1,13 @@
 from ..models import Company, Portfolio, User
+from json import JSONDecodeError
+from ..forms import CompanyAddForm
 from ..models import db as _db
+from ..routes import fetch_stock_portfolio
 from .. import app as _app
+from flask import session
 import pytest
+import json
 import os
-
 
 @pytest.fixture()
 def app(request):
@@ -88,14 +92,37 @@ def portfolio(session, user):
 def company(session):
     """
     """
-    company = Company(companyName='Apple Inc.', symbol='AAPL')
+    company = Company(companyName='Apple Inc.', symbol='AAPL', portfolio_id='1')
 
     session.add(company)
     session.commit()
     return company
 
 
+@pytest.fixture()
+def company_add_form(session):
+    """
+    """
+    symbol = 'AAPL'
+    res = fetch_stock_portfolio(symbol)
 
+    decoded = json.loads(res.text)
+    form_context = {
+        'symbol': decoded['symbol'],
+        'name': decoded['companyName'],
+        'exchange': decoded['exchange'],
+        'industry': decoded['industry'],
+        'website': decoded['website'],
+        'description': decoded['description'],
+        'CEO': decoded['CEO'],
+        'issueType': decoded['issueType'],
+        'sector': decoded['sector'],
+    }
+
+    company_form = CompanyAddForm(**form_context)
+    # company_form.data has all required information
+
+    return company_form
 
 
 

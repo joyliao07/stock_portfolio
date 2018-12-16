@@ -3,7 +3,7 @@ from . import app
 from .auth import login_required
 
 # 3rd Party Requirements
-from flask import render_template, abort, redirect, url_for, session, g, request, flash, session
+from flask import render_template, abort, redirect, url_for, session, g, request, flash
 from sqlalchemy.exc import IntegrityError, DBAPIError
 
 # Models
@@ -93,7 +93,11 @@ def preview_company():
 
     form = CompanyAddForm(**form_context)
 
+
     if form.validate_on_submit():
+        # THE FORM IS NEVER VALIDATED FROM THE TEST:
+        # import pdb; pdb.set_trace()
+
         try:
             company = Company(
                 symbol=form.data['symbol'],
