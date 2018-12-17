@@ -96,7 +96,7 @@ def preview_company():
 
     if form.validate_on_submit():
         # THE FORM IS NEVER VALIDATED FROM THE TEST:
-        company_dt = [(str(c.symbol)) for c in Company.query.all()]
+        company_dt = [(str(c.symbol)) for c in Company.query.filter(form.data['portfolios'] == g.user.id).all()]
         if form.data['symbol'] in company_dt:
             print('company already exist!!!')
             flash('Company already in your portfolio.')
@@ -157,8 +157,10 @@ def portfolio_detail():
             return render_template('portfolio.html', form=form)
         return redirect(url_for('.company_search'))
 
-    user_portfolios = Portfolio.query.filter(Portfolio.user_id == g.user.id).all()
+    user_portfolios = Portfolio.query.filter(Portfolio.user_id==g.user.id).all()
     port_ids = [c.id for c in user_portfolios]
+
+
 
     companies = Company.query.filter(Company.portfolio_id.in_(port_ids)).all()
     return render_template('portfolio.html', companies=companies, form=form)
