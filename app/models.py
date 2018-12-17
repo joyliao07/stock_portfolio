@@ -23,8 +23,8 @@ class Company(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     portfolio_id = db.Column(db.ForeignKey('portfolios.id'), nullable=False)
-    symbol = db.Column(db.String(64), index=True, unique=True)
-    companyName = db.Column(db.String(256), index=True, unique=True)
+    symbol = db.Column(db.String(64), index=True)
+    companyName = db.Column(db.String(256), index=True)
     exchange = db.Column(db.String(128))
     industry = db.Column(db.String(128))
     website = db.Column(db.String(128))

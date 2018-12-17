@@ -96,7 +96,11 @@ def preview_company():
 
     if form.validate_on_submit():
         # THE FORM IS NEVER VALIDATED FROM THE TEST:
-        # import pdb; pdb.set_trace()
+        company_dt = [(str(c.symbol)) for c in Company.query.all()]
+        if form.data['symbol'] in company_dt:
+            print('company already exist!!!')
+            flash('Company already in your portfolio.')
+            return redirect(url_for('.company_search'))
 
         try:
             company = Company(

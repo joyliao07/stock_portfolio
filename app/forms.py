@@ -3,6 +3,13 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, PasswordField
 from wtforms.validators import DataRequired
 from .models import Portfolio
+# from .routes import get_portfolios
+
+# @app.add_template_global
+# def get_portfolios():
+#     """
+#     """
+#     return Portfolio.query.filter_by(user_id=g.user.id).all()
 
 
 #########
@@ -34,7 +41,6 @@ class CompanyAddForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.portfolios.choices = [(str(p.id), p.name) for p in Portfolio.query.all()]
-
 
 class PortfolioCreateForm(FlaskForm):
     """
