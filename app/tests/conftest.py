@@ -67,6 +67,27 @@ def session(db, request):
 
 
 @pytest.fixture()
+def client(app, db, session):
+    """
+    """
+    client = app.test_client()
+    ctx = app.app_context()
+    ctx.push()
+
+    yield client
+
+    ctx.pop()
+
+
+@pytest.fixture()
+def flask_session(client):
+    """
+    """
+    with client.session_transaction() as flask_session:
+            yield flask_session
+
+
+@pytest.fixture()
 def user(session):
     """
     """
@@ -75,6 +96,20 @@ def user(session):
     session.add(user)
     session.commit()
     return user
+
+
+@pytest.fixture()
+def authenticated_client(client, user):
+    """
+    """
+    client.post(
+        '/login',
+        data={'email': user.email, 'password': 'secret'},
+        follow_redirects=True,
+    )
+    yield client
+
+    client.get('/logout')
 
 
 @pytest.fixture()

@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, PasswordField
 from wtforms.validators import DataRequired
 from .models import Portfolio
+from flask import g
 
 
 #########
@@ -33,7 +34,7 @@ class CompanyAddForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.portfolios.choices = [(str(p.id), p.name) for p in Portfolio.query.all()]
+        self.portfolios.choices = [(str(p.id), p.name) for p in Portfolio.query.filter(Portfolio.user_id == g.user.id).all()]
 
 
 class PortfolioCreateForm(FlaskForm):

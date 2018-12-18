@@ -95,29 +95,26 @@ def preview_company():
 
 
     if form.validate_on_submit():
-        # THE FORM IS NEVER VALIDATED FROM THE TEST:
-        # import pdb; pdb.set_trace()
-
-        try:
-            company = Company(
-                symbol=form.data['symbol'],
-                companyName=form.data['name'],
-                exchange=form.data['exchange'],
-                industry=form.data['industry'],
-                website=form.data['website'],
-                description=form.data['description'],
-                CEO=form.data['CEO'],
-                issueType=form.data['issueType'],
-                sector=form.data['sector'],
-                portfolio_id=form.data['portfolios'],
-            )
-
-            db.session.add(company)
-            db.session.commit()
-
-        except (DBAPIError, IntegrityError):
-            flash('Oops. Something went wrong with your search.')
+        existing_symbol = [(str(c.symbol)) for c in Company.query.filter(Company.portfolio_id == form.data['portfolios']).all()]
+        if form.data['symbol'] in existing_symbol:
+            flash('Company already in your portfolio.')
             return redirect(url_for('.company_search'))
+
+        company = Company(
+            symbol=form.data['symbol'],
+            companyName=form.data['name'],
+            exchange=form.data['exchange'],
+            industry=form.data['industry'],
+            website=form.data['website'],
+            description=form.data['description'],
+            CEO=form.data['CEO'],
+            issueType=form.data['issueType'],
+            sector=form.data['sector'],
+            portfolio_id=form.data['portfolios'],
+        )
+
+        db.session.add(company)
+        db.session.commit()
 
         return redirect(url_for('.portfolio_detail'))
 
@@ -153,8 +150,10 @@ def portfolio_detail():
             return render_template('portfolio.html', form=form)
         return redirect(url_for('.company_search'))
 
-    user_portfolios = Portfolio.query.filter(Portfolio.user_id == g.user.id).all()
+    user_portfolios = Portfolio.query.filter(Portfolio.user_id==g.user.id).all()
     port_ids = [c.id for c in user_portfolios]
+
+
 
     companies = Company.query.filter(Company.portfolio_id.in_(port_ids)).all()
     return render_template('portfolio.html', companies=companies, form=form)
