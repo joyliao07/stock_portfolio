@@ -95,33 +95,26 @@ def preview_company():
 
 
     if form.validate_on_submit():
-        # THE FORM IS NEVER VALIDATED FROM THE TEST:
-        company_dt = [(str(c.symbol)) for c in Company.query.filter(form.data['portfolios'] == g.user.id).all()]
-        if form.data['symbol'] in company_dt:
-            print('company already exist!!!')
+        existing_symbol = [(str(c.symbol)) for c in Company.query.filter(Company.portfolio_id == form.data['portfolios']).all()]
+        if form.data['symbol'] in existing_symbol:
             flash('Company already in your portfolio.')
             return redirect(url_for('.company_search'))
 
-        try:
-            company = Company(
-                symbol=form.data['symbol'],
-                companyName=form.data['name'],
-                exchange=form.data['exchange'],
-                industry=form.data['industry'],
-                website=form.data['website'],
-                description=form.data['description'],
-                CEO=form.data['CEO'],
-                issueType=form.data['issueType'],
-                sector=form.data['sector'],
-                portfolio_id=form.data['portfolios'],
-            )
+        company = Company(
+            symbol=form.data['symbol'],
+            companyName=form.data['name'],
+            exchange=form.data['exchange'],
+            industry=form.data['industry'],
+            website=form.data['website'],
+            description=form.data['description'],
+            CEO=form.data['CEO'],
+            issueType=form.data['issueType'],
+            sector=form.data['sector'],
+            portfolio_id=form.data['portfolios'],
+        )
 
-            db.session.add(company)
-            db.session.commit()
-
-        except (DBAPIError, IntegrityError):
-            flash('Oops. Something went wrong with your search.')
-            return redirect(url_for('.company_search'))
+        db.session.add(company)
+        db.session.commit()
 
         return redirect(url_for('.portfolio_detail'))
 
