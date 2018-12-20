@@ -17,6 +17,9 @@ pytest = "*"
 coverage = "*"
 wtforms = "*"
 passlib = "*"
+numpy = "*"
+pandas = "*"
+bokeh = "*"
 
 [requires]
 python_version = "3.6"

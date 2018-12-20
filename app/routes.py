@@ -157,3 +157,37 @@ def portfolio_detail():
 
     companies = Company.query.filter(Company.portfolio_id.in_(port_ids)).all()
     return render_template('portfolio.html', companies=companies, form=form)
+
+
+@app.route('/candlestick_chart', methods=['GET', 'POST'])
+# @login_required
+def candlestick_chart():
+    """To generate a candlestick chart of the chosen company."""
+
+    if 1 == 1:
+        # 5 YEARS OF HISTORY IS AVAILABLE
+        print('routed to "1"')
+
+
+
+        return render_template('candlestick_chart.html')
+    else:
+        # 5-YEAR DATA IS NOT AVAILABLE
+        flash('Company does not have a 5-year history.')
+        return redirect(url_for('.company_search'))
+
+
+
+@app.route('/stock_chart', methods=['GET', 'POST'])
+# @login_required
+def stock_chart():
+    """To generate a stock chart of the chosen company."""
+
+    return render_template('stock_chart.html')
+    # if 0
+    #     # IF THE CHOSEN COMPANY IS VALID
+    #     # pass
+    # else:
+        # GENERATE A CANDLESTICK CHART HERE
+
+
