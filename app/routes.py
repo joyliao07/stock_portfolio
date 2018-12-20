@@ -179,10 +179,14 @@ def candlestick_chart():
     if 1 == 1:
         # 5 YEARS OF HISTORY IS AVAILABLE
         data = json.loads(session['context'])
+        company_symbol = data['symbol']
+
+        res = req.get(f'https://api.iextrading.com/1.0/stock/{company_symbol}/chart/5y')
+        data_5_year = res.json()
 
         # PASS DATA INTO DATAFRAME
-        df = pd.DataFrame(data)
-        import pdb; pdb.set_trace()
+        df = pd.DataFrame(data_5_year)
+
         df['date_pd'] = pd.to_datetime(df.date)
         df['year'] = df.date_pd.dt.year
         seqs = np.arange(df.shape[0])
@@ -220,11 +224,17 @@ def candlestick_chart():
 
         p.xaxis.major_label_orientation = np.pi/4
         p.grid.grid_line_alpha = w
-
         descriptor = Label(x=70, y=70, text='5-Year Data Of Your Chosen Company')
         p.add_layout(descriptor)
 
+        # CHART LAYOUT
         p.segment(df.seqs[inc], df.high[inc], df.seqs[inc], df.low[inc], color='green')
+        p.segment(df.seqs[dec], df.high[dec], df.seqs[dec], df.low[dec], color='red')
+        p.rect(x='seqs', y='mid', width=w, height='height', fill_color='red', line_color='red', source=sourceDec)
+        p.rect(x='seqs', y='mid', width=w, height='height', fill_color='green', line_color='green', source=sourceInc)
+
+
+
 
 
 
