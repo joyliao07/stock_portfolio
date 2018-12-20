@@ -18,6 +18,18 @@ import requests as req
 import json
 import os
 
+# Numpy & Charts
+import numpy as np
+from datetime import datetime
+import pandas as pd
+import numpy.polynomial.polynomial as poly
+import bokeh.plotting as bk
+from bokeh.models import HoverTool, Label, BoxZoomTool, PanTool, ZoomInTool, ZoomOutTool, ResetTool
+from pandas.plotting._converter import DatetimeConverter
+# import matplotlib
+# import matplotlib.pyplot as plt
+
+
 # helpers
 
 def fetch_stock_portfolio(company):
@@ -166,7 +178,57 @@ def candlestick_chart():
 
     if 1 == 1:
         # 5 YEARS OF HISTORY IS AVAILABLE
-        print('routed to "1"')
+        data = json.loads(session['context'])
+
+        # PASS DATA INTO DATAFRAME
+        df = pd.DataFrame(data)
+        import pdb; pdb.set_trace()
+        df['date_pd'] = pd.to_datetime(df.date)
+        df['year'] = df.date_pd.dt.year
+        seqs = np.arange(df.shape[0])
+        df['seqs'] = pd.Series(seqs)
+
+        df['mid'] = (df.high + df.low) // 2
+
+        df['height'] = df.apply(
+            lambda x: x['close'] - x['open'] if x['close'] != x['open'] else 0.01,
+            axis=1
+        )
+
+        inc = df.close > df.open
+        dec = df.close < df.open
+        w = .3
+
+        sourceInc = bk.ColumnDataSource(df.loc[inc])
+        sourceDec = bk.ColumnDataSource(df.loc[dec])
+
+        hover = HoverTool(
+            tooltips=[
+                ('Date', '@date'),
+                ('Low', '@low'),
+                ('High', '@high'),
+                ('Open', '@open'),
+                ('Close', '@close'),
+                ('Mid', '@mid'),
+            ]
+        )
+
+        TOOLS = [hover, BoxZoomTool(), PanTool(), ZoomInTool(), ZoomOutTool(), ResetTool()]
+
+        # PLOTTING THE CHART
+        p = bk.figure(plot_width=1200, plot_height=800, title= f'{company_symbol}' , tools=TOOLS, toolbar_location='above')
+
+        p.xaxis.major_label_orientation = np.pi/4
+        p.grid.grid_line_alpha = w
+
+        descriptor = Label(x=70, y=70, text='5-Year Data Of Your Chosen Company')
+        p.add_layout(descriptor)
+
+        p.segment(df.seqs[inc], df.high[inc], df.seqs[inc], df.low[inc], color='green')
+
+
+
+
 
 
 
