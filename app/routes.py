@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError, DBAPIError
 from .models import Company, db, Portfolio
 
 # Forms
-from .forms import StockSearchForm, CompanyAddForm, PortfolioCreateForm
+from .forms import StockSearchForm, CompanyAddForm, PortfolioCreateForm, ChartForm
 
 # API Requests & Other
 from json import JSONDecodeError
@@ -153,6 +153,9 @@ def portfolio_detail():
 
     form = PortfolioCreateForm()
 
+    form_2 = ChartForm()
+
+
     if form.validate_on_submit():
         try:
             portfolio = Portfolio(name=form.data['name'], user_id=g.user.id)
@@ -169,7 +172,7 @@ def portfolio_detail():
 
 
     companies = Company.query.filter(Company.portfolio_id.in_(port_ids)).all()
-    return render_template('portfolio.html', companies=companies, form=form)
+    return render_template('portfolio.html', companies=companies, form=form, form_2=form_2)
 
 
 @app.route('/candlestick_chart', methods=['GET', 'POST'])
@@ -178,6 +181,10 @@ def candlestick_chart():
     """To generate a candlestick chart of the chosen company."""
 
     if 1 == 1:
+
+        # does form data exist here???
+        # import pdb; pdb.set_trace()
+
         # 5 YEARS OF HISTORY IS AVAILABLE
         data = json.loads(session['context'])
         company_symbol = data['symbol']
