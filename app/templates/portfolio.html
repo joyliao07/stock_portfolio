@@ -18,13 +18,10 @@
       <div class="city">
         <h2>Portfolio: {{ company.portfolio.name }}</h2>
 
-      <nav>
-        <ul>
-          <li><a href="{{ url_for(".candlestick_chart") }}">See Candlestick Chart</a></li>
-          <li><a href="{{ url_for(".stock_chart") }}">See Stock Chart</a></li>
-        </ul>
-      </nav>
-
+      <form action="" method="get">
+        <button name="charts" type="submit" value=""><a href="{{ url_for(".candlestick_chart") }}">See Candlestick Chart</a></button>
+        <button name="charts" type="submit" value=""><a href="{{ url_for(".stock_chart") }}">See Stock Chart</a></button>
+      </form>
 
         <p>Name: {{ company.companyName }}</p>
         <p>Symbol: {{ company.symbol }}</p>
