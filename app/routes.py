@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError, DBAPIError
 from .models import Company, db, Portfolio
 
 # Forms
-from .forms import StockSearchForm, CompanyAddForm, PortfolioCreateForm, ChartForm
+from .forms import StockSearchForm, CompanyAddForm, PortfolioCreateForm
 
 # API Requests & Other
 from json import JSONDecodeError
@@ -173,21 +173,12 @@ def portfolio_detail():
     return render_template('portfolio.html', companies=companies, form=form)
 
 
-@app.route('/candlestick_chart', methods=['GET', 'POST'])
+@app.route('/candlestick_chart/<symbol>', methods=['GET', 'POST'])
 # @login_required
-def candlestick_chart():
+def candlestick_chart(symbol):
     """To generate a candlestick chart of the chosen company."""
 
-    form = ChartForm()
-
-    if form.validate_on_submit:
-        # company_symbol = form.data['symbol']
-        # form.data['symbol'] = None
-        pass
-
-    company_symbol = 'aapl'
-
-    res = req.get(f'https://api.iextrading.com/1.0/stock/{company_symbol}/chart/5y')
+    res = req.get(f'https://api.iextrading.com/1.0/stock/{symbol}/chart/5y')
     data_5_year = res.json()
 
     df = pd.DataFrame(data_5_year)
@@ -233,7 +224,7 @@ def candlestick_chart():
         TOOLS = [hover, BoxZoomTool(), PanTool(), ZoomInTool(), ZoomOutTool(), ResetTool()]
 
         # PLOTTING THE CHART
-        p = bk.figure(plot_width=600, plot_height=450, title= f'{company_symbol}' , tools=TOOLS, toolbar_location='above')
+        p = bk.figure(plot_width=600, plot_height=450, title= f'{symbol}' , tools=TOOLS, toolbar_location='above')
 
         p.xaxis.major_label_orientation = np.pi/4
         p.grid.grid_line_alpha = w
@@ -257,14 +248,12 @@ def candlestick_chart():
 
 
 
-@app.route('/stock_chart', methods=['GET', 'POST'])
+@app.route('/stock_chart/<symbol>', methods=['GET', 'POST'])
 # @login_required
-def stock_chart():
+def stock_chart(symbol):
     """To generate a stock chart of the chosen company."""
 
-    company_symbol = 'aapl'
-
-    res = req.get(f'https://api.iextrading.com/1.0/stock/{company_symbol}/chart/5y')
+    res = req.get(f'https://api.iextrading.com/1.0/stock/{symbol}/chart/5y')
     data_5_year = res.json()
 
     df = pd.DataFrame(data_5_year)
@@ -289,18 +278,18 @@ def stock_chart():
 
 
         # PLOTTING THE CHART
-        p1 = bk.figure(x_axis_type="datetime", title=f'Company: {company_symbol}', toolbar_location='above')
+        p1 = bk.figure(x_axis_type="datetime", title=f'Company: {symbol}', toolbar_location='above')
         p1.grid.grid_line_alpha=0.3
         p1.xaxis.axis_label = 'Date'
         p1.yaxis.axis_label = 'Price'
 
 
         # CHART LAYOUT
-        p1.line(datetime(df['date']), df['open'], color='yellow', legend=f'{company_symbol}')
-        p1.line(datetime(df['date']), df['close'], color='purple', legend=f'{company_symbol}')
-        p1.line(datetime(df['date']), df['high'], color='red', legend=f'{company_symbol}')
-        p1.line(datetime(df['date']), df['low'], color='green', legend=f'{company_symbol}')
-        p1.line(datetime(df['date']), df['mid'], color='black', legend=f'{company_symbol}')
+        p1.line(datetime(df['date']), df['open'], color='yellow', legend=f'{symbol}')
+        p1.line(datetime(df['date']), df['close'], color='purple', legend=f'{symbol}')
+        p1.line(datetime(df['date']), df['high'], color='red', legend=f'{symbol}')
+        p1.line(datetime(df['date']), df['low'], color='green', legend=f'{symbol}')
+        p1.line(datetime(df['date']), df['mid'], color='black', legend=f'{symbol}')
 
         p1.legend.location = "top_left"
 

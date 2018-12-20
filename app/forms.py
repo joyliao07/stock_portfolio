@@ -48,16 +48,3 @@ class AuthForm(FlaskForm):
     """
     email = StringField('email', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
-
-
-class ChartForm(FlaskForm):
-    """
-    """
-    symbol = StringField('Company Symbol', validators=[DataRequired()])
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-
-
-

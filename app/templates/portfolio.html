@@ -20,11 +20,10 @@
         <h2>Portfolio: {{ company.portfolio.name }}</h2>
 
       <!-- Here is the form to see chart.-->
-      <form action="{{ url_for(".portfolio_detail") }}" method="GET">
-          {{ form.hidden_tag() }}
-          <button name="charts" type="submit" value={{ company.symbol }}><a href="{{ url_for(".candlestick_chart") }}">See Candlestick Chart</a></button>
-          <button name="charts" type="submit" value={{ company.symbol }}><a href="{{ url_for(".stock_chart") }}">See Stock Chart</a></button>
-      </form>
+
+        <a href={{ url_for(".candlestick_chart", symbol=company.symbol) }}> See Candlestick Chart </a>
+        <br>
+        <a href={{ url_for(".stock_chart", symbol=company.symbol) }}> See Stock Chart </a>
 
         <p>Name: {{ company.companyName }}</p>
         <p>Symbol: {{ company.symbol }}</p>
