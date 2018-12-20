@@ -26,6 +26,7 @@ import numpy.polynomial.polynomial as poly
 import bokeh.plotting as bk
 from bokeh.models import HoverTool, Label, BoxZoomTool, PanTool, ZoomInTool, ZoomOutTool, ResetTool
 from pandas.plotting._converter import DatetimeConverter
+from bokeh.embed import components
 # import matplotlib
 # import matplotlib.pyplot as plt
 
@@ -220,11 +221,11 @@ def candlestick_chart():
         TOOLS = [hover, BoxZoomTool(), PanTool(), ZoomInTool(), ZoomOutTool(), ResetTool()]
 
         # PLOTTING THE CHART
-        p = bk.figure(plot_width=1200, plot_height=800, title= f'{company_symbol}' , tools=TOOLS, toolbar_location='above')
+        p = bk.figure(plot_width=600, plot_height=450, title= f'{company_symbol}' , tools=TOOLS, toolbar_location='above')
 
         p.xaxis.major_label_orientation = np.pi/4
         p.grid.grid_line_alpha = w
-        descriptor = Label(x=70, y=70, text='5-Year Data Of Your Chosen Company')
+        descriptor = Label(x=180, y=2000, text='5-Year Data Of Your Chosen Company')
         p.add_layout(descriptor)
 
         # CHART LAYOUT
@@ -233,16 +234,10 @@ def candlestick_chart():
         p.rect(x='seqs', y='mid', width=w, height='height', fill_color='red', line_color='red', source=sourceDec)
         p.rect(x='seqs', y='mid', width=w, height='height', fill_color='green', line_color='green', source=sourceInc)
 
+        script, div = components(p)
 
+        return render_template("candlestick_chart.html", the_div=div, the_script=script)
 
-
-
-
-
-
-
-
-        return render_template('candlestick_chart.html')
     else:
         # 5-YEAR DATA IS NOT AVAILABLE
         flash('Company does not have a 5-year history.')
