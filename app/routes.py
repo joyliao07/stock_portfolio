@@ -27,6 +27,7 @@ import bokeh.plotting as bk
 from bokeh.models import HoverTool, Label, BoxZoomTool, PanTool, ZoomInTool, ZoomOutTool, ResetTool
 from pandas.plotting._converter import DatetimeConverter
 from bokeh.embed import components
+from bokeh.layouts import gridplot
 # import matplotlib
 # import matplotlib.pyplot as plt
 
@@ -153,9 +154,6 @@ def portfolio_detail():
 
     form = PortfolioCreateForm()
 
-    form_2 = ChartForm()
-
-
     if form.validate_on_submit():
         try:
             portfolio = Portfolio(name=form.data['name'], user_id=g.user.id)
@@ -172,7 +170,7 @@ def portfolio_detail():
 
 
     companies = Company.query.filter(Company.portfolio_id.in_(port_ids)).all()
-    return render_template('portfolio.html', companies=companies, form=form, form_2=form_2)
+    return render_template('portfolio.html', companies=companies, form=form)
 
 
 @app.route('/candlestick_chart', methods=['GET', 'POST'])
@@ -180,23 +178,30 @@ def portfolio_detail():
 def candlestick_chart():
     """To generate a candlestick chart of the chosen company."""
 
-    if 1 == 1:
+    form = ChartForm()
 
-        # does form data exist here???
-        # import pdb; pdb.set_trace()
+    if form.validate_on_submit:
+        # company_symbol = form.data['symbol']
+        # form.data['symbol'] = None
+        pass
+
+    company_symbol = 'aapl'
+
+    res = req.get(f'https://api.iextrading.com/1.0/stock/{company_symbol}/chart/5y')
+    data_5_year = res.json()
+
+    df = pd.DataFrame(data_5_year)
+
+    df['date_pd'] = pd.to_datetime(df.date)
+    df['year'] = df.date_pd.dt.year
+
+    year_num = df.year[int(len(df)-1)] - df.year[3]
+
+    if year_num >= 5:
 
         # 5 YEARS OF HISTORY IS AVAILABLE
-        data = json.loads(session['context'])
-        company_symbol = data['symbol']
-
-        res = req.get(f'https://api.iextrading.com/1.0/stock/{company_symbol}/chart/5y')
-        data_5_year = res.json()
 
         # PASS DATA INTO DATAFRAME
-        df = pd.DataFrame(data_5_year)
-
-        df['date_pd'] = pd.to_datetime(df.date)
-        df['year'] = df.date_pd.dt.year
         seqs = np.arange(df.shape[0])
         df['seqs'] = pd.Series(seqs)
 
@@ -248,7 +253,7 @@ def candlestick_chart():
     else:
         # 5-YEAR DATA IS NOT AVAILABLE
         flash('Company does not have a 5-year history.')
-        return redirect(url_for('.company_search'))
+        return redirect(url_for('.portfolio_detail'))
 
 
 
@@ -257,11 +262,58 @@ def candlestick_chart():
 def stock_chart():
     """To generate a stock chart of the chosen company."""
 
-    return render_template('stock_chart.html')
-    # if 0
-    #     # IF THE CHOSEN COMPANY IS VALID
-    #     # pass
-    # else:
-        # GENERATE A CANDLESTICK CHART HERE
+    company_symbol = 'aapl'
+
+    res = req.get(f'https://api.iextrading.com/1.0/stock/{company_symbol}/chart/5y')
+    data_5_year = res.json()
+
+    df = pd.DataFrame(data_5_year)
+
+    df['date_pd'] = pd.to_datetime(df.date)
+    df['year'] = df.date_pd.dt.year
+
+    year_num = df.year[int(len(df)-1)] - df.year[3]
+
+    # import pdb; pdb.set_trace()
+
+    if year_num >= 5:
+
+        # 5 YEARS OF HISTORY IS AVAILABLE
+
+        # PASS DATA INTO DATAFRAME
+
+        df['mid'] = (df.high + df.low) // 2
+
+        def datetime(x):
+            return np.array(x, dtype=np.datetime64)
+
+
+        # PLOTTING THE CHART
+        p1 = bk.figure(x_axis_type="datetime", title=f'Company: {company_symbol}', toolbar_location='above')
+        p1.grid.grid_line_alpha=0.3
+        p1.xaxis.axis_label = 'Date'
+        p1.yaxis.axis_label = 'Price'
+
+
+        # CHART LAYOUT
+        p1.line(datetime(df['date']), df['open'], color='yellow', legend=f'{company_symbol}')
+        p1.line(datetime(df['date']), df['close'], color='purple', legend=f'{company_symbol}')
+        p1.line(datetime(df['date']), df['high'], color='red', legend=f'{company_symbol}')
+        p1.line(datetime(df['date']), df['low'], color='green', legend=f'{company_symbol}')
+        p1.line(datetime(df['date']), df['mid'], color='black', legend=f'{company_symbol}')
+
+        p1.legend.location = "top_left"
+
+        script, div = components(p1)
+
+        return render_template("stock_chart.html", the_div=div, the_script=script)
+
+    else:
+        # 5-YEAR DATA IS NOT AVAILABLE
+        flash('Company does not have a 5-year history.')
+        return redirect(url_for('.portfolio_detail'))
+
+
+
 
 

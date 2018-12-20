@@ -2,12 +2,16 @@
 
 {% block content %}
 
-  <h2>Here is the stock chart.</h2>
+  <h2>Here is the stocks chart.</h2>
+
 
   {{ the_div|safe }}
-    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.js"></script>
-    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.5.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.2/bokeh.min.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.2/bokeh.min.js"></script>
+
+
   {{ the_script|safe }}
+
 
 
 
