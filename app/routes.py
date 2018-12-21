@@ -173,12 +173,15 @@ def portfolio_detail():
     return render_template('portfolio.html', companies=companies, form=form)
 
 
+@login_required
 @app.route('/candlestick_chart/<symbol>', methods=['GET', 'POST'])
-# @login_required
 def candlestick_chart(symbol):
     """To generate a candlestick chart of the chosen company."""
 
-    res = req.get(f'https://api.iextrading.com/1.0/stock/{symbol}/chart/5y')
+    url = f'https://api.iextrading.com/1.0/stock/{symbol}/chart/5y'
+
+    res = req.get(url)
+
     data_5_year = res.json()
 
     df = pd.DataFrame(data_5_year)
@@ -247,9 +250,8 @@ def candlestick_chart(symbol):
         return redirect(url_for('.portfolio_detail'))
 
 
-
+@login_required
 @app.route('/stock_chart/<symbol>', methods=['GET', 'POST'])
-# @login_required
 def stock_chart(symbol):
     """To generate a stock chart of the chosen company."""
 
@@ -262,8 +264,6 @@ def stock_chart(symbol):
     df['year'] = df.date_pd.dt.year
 
     year_num = df.year[int(len(df)-1)] - df.year[3]
-
-    # import pdb; pdb.set_trace()
 
     if year_num >= 5:
 
@@ -301,8 +301,3 @@ def stock_chart(symbol):
         # 5-YEAR DATA IS NOT AVAILABLE
         flash('Company does not have a 5-year history.')
         return redirect(url_for('.portfolio_detail'))
-
-
-
-
-
