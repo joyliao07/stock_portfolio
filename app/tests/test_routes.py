@@ -113,6 +113,24 @@ class TestClass:
         # confirm proper markup
         assert b'<h2>Search for stocks</h2>' in authenticated_client.post('/preview', data=form_data, follow_redirects=True).data
 
+    def test_candlestick_chart(self, authenticated_client):
+        """See the candlestick chart of..."""
+
+        rv = authenticated_client.get('/candlestick_chart/aapl')
+        assert rv.status_code == 200
+
+        # confirm proper markup
+        assert b'<h2>See the candlestick chart.</h2>' in authenticated_client.get('/candlestick_chart/aapl').data
+
+    def test_stock_chart(self, authenticated_client):
+        """See the stock chart of..."""
+
+        rv = authenticated_client.get('/stock_chart/aapl')
+        assert rv.status_code == 200
+
+        # confirm proper markup
+        assert b'<h2>See the stocks chart.</h2>' in authenticated_client.get('/stock_chart/aapl').data
+
     def test_portfolio_add_new(self, authenticated_client, portfolio):
         """Add a fresh portfolio and follow redirect"""
         # simulate form input

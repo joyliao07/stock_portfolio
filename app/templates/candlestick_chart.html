@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h2>See the candlestick chart.</h2>
+
+
+  {{ the_div|safe }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.2/bokeh.min.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.2/bokeh.min.js"></script>
+
+
+  {{ the_script|safe }}
+
+
+
+
+{% endblock content %}

@@ -4,6 +4,7 @@
 <div class="container">
   <h2 class="portfolio-create-new">Welcome to the Portfolio</h2>
 
+  <!-- Here is the form to create a new portfolio.-->
   <div class="portfolio-create-new">
     <h3>Create a new Portfolio!</h3>
     <form action="{{ url_for(".portfolio_detail") }}" method="POST">
@@ -16,17 +17,21 @@
   <div>
     {% for company in companies %}
       <div class="city">
-        <h2>{{ company.portfolio.name }}</h2>
-        <p>portfolio_id: {{ company.portfolio_id }}</p>
-        <p>symbol: {{ company.symbol }}</p>
-        <p>name: {{ company.companyName }}</p>
-        <p>exchange: {{ company.exchange }}</p>
-        <p>industry: {{ company.industry }}</p>
-        <p>website: {{ company.website }}</p>
-        <p>description: {{ company.description }}</p>
+        <h2>Portfolio: {{ company.portfolio.name }}</h2>
+
+      <!-- Here is the form to see chart.-->
+
+        <a href={{ url_for(".candlestick_chart", symbol=company.symbol) }}> See Candlestick Chart </a>
+        <br>
+        <a href={{ url_for(".stock_chart", symbol=company.symbol) }}> See Stock Chart </a>
+
+        <p>Name: {{ company.companyName }}</p>
+        <p>Symbol: {{ company.symbol }}</p>
+        <p>Exchange: {{ company.exchange }}</p>
+        <p>Industry: {{ company.industry }}</p>
+        <p>Website: {{ company.website }}</p>
+        <p>Description: {{ company.description }}</p>
         <p>CEO: {{ company.CEO }}</p>
-        <p>issueType: {{ company.issueType }}</p>
-        <p>sector: {{ company.sector }}</p>
 
       </div>
     {% endfor %}
