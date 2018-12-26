@@ -1,10 +1,9 @@
 # STOCK_PORTFOLIA
-code 08: stock_portfolio
-code 11: Testing
 
 
 Author: Joyce Liao
 Version: 1.0.0
+
 
 
 ## OVERVIEW
@@ -26,7 +25,7 @@ REQUIRED PIPENV PACKAGES ARE:
 - FLASK-WTF
 - PYTHON-DOTENV
 
-CONNECTIONS ARE SET UP IN "wsgi.py", "router.py", and other required files to work as the server of the website.
+Connections are set up in "wsgi.py", "router.py", and other required files to work as the server of the website.
 
 
 ## API
