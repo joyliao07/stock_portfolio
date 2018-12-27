@@ -25,14 +25,15 @@ header {
 
     .home-main {
         text-align: center;
-    }
-
-    .home-main-2 {
-        /* content: url('../assets/coin.jpg'); */
+        margin-bottom: 450px;
     }
 
     .home-h1 {
         -webkit-animation:colorchange 4s infinite alternate;
+    }
+
+    .register, .login, .search, .preview {
+        margin-bottom: 450px;
     }
 
     @-webkit-keyframes colorchange {
@@ -64,3 +65,21 @@ header {
         font-size: 25px;
 
     }
+
+    .company, p {
+        font-size: 15px;
+        margin-bottom: 0.25rem;
+    }
+
+    .company {
+        margin-bottom: 100px;
+    }
+
+
+
+
+
+
+
+
+

@@ -126,7 +126,7 @@
     font-weight: 400;
     font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #222;
-    background: rgb(136, 136, 74); }
+    background: rgb(238, 237, 236); }
 
 
   /* Typography
@@ -164,8 +164,11 @@
   }
   a:hover {
     color: whitesmoke;
-    font-size: 30px;
-    background: purple;}
+    font-size: 18px;
+    background: rgb(63, 62, 62);
+    border-radius: 8%;
+    padding: 4px 10px;
+  }
 
 
   /* Buttons
