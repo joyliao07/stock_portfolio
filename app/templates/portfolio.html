@@ -6,17 +6,17 @@
 
   <!-- Here is the form to create a new portfolio.-->
   <div class="portfolio-create-new">
-    <h3>Create a new Portfolio!</h3>
+    <h5>You can create a new portfolio here. </h5>
     <form action="{{ url_for(".portfolio_detail") }}" method="POST">
       {{ form.hidden_tag() }}
       {{ form.name.label }}{{ form.name(size=20) }}
-      <input type="submit" name="create_category" id="create_category" value="Go">
+      <input type="submit" name="create_category" id="create_category" value="Create">
     </form>
   </div>
 
   <div>
     {% for company in companies %}
-      <div class="city">
+      <div class="company">
         <h2>Portfolio: {{ company.portfolio.name }}</h2>
 
       <!-- Here is the form to see chart.-->
