@@ -20,9 +20,6 @@
         <h2>Portfolio: {{ company.portfolio.name }}</h2>
 
       <!-- Here is the form to see chart.-->
-
-        <a href={{ url_for(".candlestick_chart", symbol=company.symbol) }}> See Candlestick Chart </a>
-        <br>
         <a href={{ url_for(".stock_chart", symbol=company.symbol) }}> See Stock Chart </a>
 
         <p>Name: {{ company.companyName }}</p>

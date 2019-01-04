@@ -281,7 +281,7 @@ def stock_chart(symbol):
         p1 = bk.figure(x_axis_type="datetime", title=f'Company: {symbol}', toolbar_location='above')
         p1.grid.grid_line_alpha=0.3
         p1.xaxis.axis_label = 'Date'
-        p1.yaxis.axis_label = 'Price'
+        p1.yaxis.axis_label = 'Dollar'
 
 
         # CHART LAYOUT
