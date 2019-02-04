@@ -1,4 +1,4 @@
-# STOCK_PORTFOLIA
+# STOCK_PORTFOLIO
 
 
 Author: Joyce Liao
