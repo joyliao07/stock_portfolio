@@ -51,6 +51,43 @@ To Set Up <ssh>:
 5. <control + X>, <Yes>, and <Enter> to save
 
 
+To Start ssh in Ubuntu:
+1. <ssh (host)>; answer “yes”
+2. <which python3> to see that your python3 has been installed
+3. <git --version> to see that your git has been installed
+4. Follow the class tutorial: https://github.com/codefellows/seattle-python-401d10/blob/master/class-09-deployment/notes/deployment.md
+*  When <pip3 install -r requirements.txt>, DO NOT run <pip install …> because they will give you the wrong version. Also DO NOT use <sudo> to pip install because it will install the packages as the root user of the Linux machine and cause permission issues. <pip install…> will install as the Ubuntu user.
+*  When <sudo nano /etc/nginx/conf.d/(project_name).conf> to add a project-specific config to the nginx, put <http://127.0.0.1:8000;> to <proxy_pass>. This is the most important line of the file, which tells nginx where to send the request . When we hear a request from port 80 (HTTP), the request is then sent to port 8000 running on local. The rest of this file is to configure the proxy to retain hearder data from the request.
+
+        # (program name).conf
+        upstream (program name) {
+            server 127.0.0.1:8000;
+        }
+
+        server {
+            listen 80;
+
+            server_name (EC2 Public DNS);
+
+            access_log  /home/ubuntu/.local/nginx.access.log;
+
+            location / {
+                proxy_set_header        Host $http_host;
+                proxy_set_header        X-Real-IP $remote_addr;
+                proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header        X-Forwarded-Proto $scheme;
+
+                client_max_body_size    10m;
+                client_body_buffer_size 128k;
+                proxy_connect_timeout   60s;
+                proxy_send_timeout      90s;
+                proxy_read_timeout      90s;
+                proxy_buffering         off;
+                proxy_temp_file_write_size 64k;
+                proxy_pass http://127.0.0.1:8000;
+                proxy_redirect          off;
+            }
+        }
 
 
 
