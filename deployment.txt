@@ -1,5 +1,6 @@
 Notes On AWS Deployment
 
+
 To Create RDS Instance:
 1. Create a group and group policies (for example, we need EC2 Full Access and RDS Full Access)
 2. Create user and add the user to the group. When a user is created, AWS will give you an “Access Key ID” and a “Secret Access Key” in a csv. file)
@@ -13,6 +14,21 @@ To Create RDS Instance:
 10. Uncheck “Enable deletion protection”, and then “Create database”.
 
 
+To Create EC2 Instance:
+- EC2 is where we put Nginx and Gunicorn live.
+1. Make sure you’re in the correct location/region in AWS.
+2. Create a new EC2 instance, choose Ubuntu-18 Free tier.
+3. Under “Add Tags”, add “Key” to be “Name” and “Value” to be “Wizard”. It is where we name this instance.
+4. Under “Configure Security Group”, create a new security group here and then make RDS to have the same security group, so the EC2 and RDS instances can talk to each other. You can name the security group whatever you like.
+5. Continue to configure the in-bound and out-bound rules of the new security group.
+    - SSH; TCP; 22; Anywhere
+    - HTTP; TCP; 80; Anywhere
+    - PostgreSQL; TCP; 5432; Anywhere
+6. “Review and launch”. “Launch”.
+7. AWS will give you a key pair; download the key pair pem file.
+8. Launch the instance.
+9. Go see the detail of the new instance, record the DNS and the security group ID.
+10. Go to the RDS instance, click on “Modify”. Remove its default security group and set it to be the same security group as the EC2 instance using the security group ID. Click “Continue”. Check box “Apply immediately” and then “Modify DB Instane”.
 
 
 
