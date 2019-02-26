@@ -139,6 +139,13 @@ Don’t need to recreate database:
 7. sudo systemctl status gunicorn
 
 
-
+To Delete And Recreate RDS Database:
+1. Create a new RDS database instance and get the endpoint
+2. Remember to set the security group to the same one as the EC2 instance; check the box “apply immediately”
+3. Update .env with the new RDS endpoint
+4. <rm -rf migrations> to remove the migration folder
+5. Remove “dot” from wsgi.py to reload gunicorn
+6. Have ‘.app’ in wsgi.py to do the flask db init, flask db migrate, flask db upgrade. From src folder, <../.local/bin/flask db upgrade>
+7. Remove the dot in `app` in wsgi.py, and then reload daemon and run the gunicorn status
 
 
