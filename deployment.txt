@@ -89,8 +89,23 @@ To Start ssh in Ubuntu:
             }
         }
 
+*  When <sudo nano /etc/systemd/system/gunicorn.service> to configure the gunicorn file, you may need to add <src.> before <wsgi:app> depending on where the wsgi.py is saved.
+        # gunicorn.service
+        [Unit]
+        Description=(program name)
+        After=network.target
 
+        [Service]
+        User=ubuntu
+        Group=www-data
+        EnvironmentFile=/home/ubuntu/src/.env
+        WorkingDirectory=/home/ubuntu/src
+        ExecStart=/home/ubuntu/.local/bin/gunicorn --access-logfile - -w 3 src.wsgi:app
 
+        [Install]
+        WantedBy=multi-user.target
+*  For gunicorn deployment, change the import path in wsgi.py by removing the dot “.” before app. However for the local server, you need to have the dot.
+*  When the gunicorn status shows active, you should be able to access the home page with EC2 DNS. To access the database, we still need to do flask migrate.
 
 
 
