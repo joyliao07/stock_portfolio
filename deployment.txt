@@ -122,6 +122,10 @@ S3_SECRET_ACCESS_KEY=
 ADMIN_USER=
 
 
+To Flask Migrate:
+1. You may need to add the dot before <app> in wsgi.py to do the flask db init, flask db migrate, flask db upgrade
+2. From src folder where wsg.py is saved, <../.local/bin/flask db upgrade> ( or run <../../.local/bin/flask db upgrade> depending on the location of your wsgi.py)
+3. Remove the dot in `app` in wsgi.py, and then reload daemon and run the gunicorn status
 
 
 
