@@ -128,6 +128,17 @@ To Flask Migrate:
 3. Remove the dot in `app` in wsgi.py, and then reload daemon and run the gunicorn status
 
 
+To Update Site With Git:
+Don’t need to recreate database:
+1. <cd> into the folder where .git resides
+2. Commit previous git status if necessary
+3. git pull origin master
+4. Make sure no ‘dot’ before app in wsgi.py, control + x, Y, enter
+5. sudo systemctl daemon-reload
+6. sudo systemctl restart gunicorn
+7. sudo systemctl status gunicorn
+
+
 
 
 
