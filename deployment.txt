@@ -1,0 +1,35 @@
+Notes On AWS Deployment
+
+To Create RDS Instance:
+1. Create a group and group policies (for example, we need EC2 Full Access and RDS Full Access)
+2. Create user and add the user to the group. When a user is created, AWS will give you an “Access Key ID” and a “Secret Access Key” in a csv. file)
+3. Make sure you’re in the correct location/region in AWS.
+4. Create an RDS instance, selecting PostgreSQL and check the box of “Free tier only”.
+5. In “Specify DB details”, you will see that the “DB instance class” shows t2.micro; t2.micro is one of the smallest unit of AWS RDS.
+6. In “Configure advanced settings”, “Public accessibility”, choose “Yes”.
+7. “In VPC security groups”, choose “Create new VPC security group”. A VPC security group is where we set the in-bound and out-bound rules.
+8. In “Performance Insights”, choose “Disable Performance Insights”.
+9. In “Log exports”, check “Postgresql log” and “Upgrade log”.
+10. Uncheck “Enable deletion protection”, and then “Create database”.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
