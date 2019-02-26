@@ -38,7 +38,17 @@ To Create S3 Bucket:
 4. Remember to add “S3 Full Access” to your group policy.
 
 
-
+To Set Up <ssh>:
+- ssh is a command that let you secure a shell into another machine.
+1. Inside your .ssh folder, <mv ~/Downloads/(name).pem ./>
+2. To make the file readable only, <chmod 400 (name).pem>
+3. <ls -l> to check the status
+4. <sudo nano config> to edit the config file:
+    - Host: the name you will type to ssh into the server
+    - Hostname: (your EC2 DNS)
+    - User: Ubuntu
+    - IdentifyFile: ~/.ssh/(name).pem
+5. <control + X>, <Yes>, and <Enter> to save
 
 
 
