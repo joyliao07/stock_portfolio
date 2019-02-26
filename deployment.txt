@@ -108,6 +108,18 @@ To Start ssh in Ubuntu:
 *  When the gunicorn status shows active, you should be able to access the home page with EC2 DNS. To access the database, we still need to do flask migrate.
 
 
+To Add .env:
+GOOGLE_APPLICATION_CREDENTIALS=
+FLASK_APP=src/wsgi.py
+FLASK_ENV=production
+SECRET_KEY=
+DATABASE_URL=postgres://<USERNAME>:<PASSWORD>@<RDS-endpoint>/postgres
+TEST_DATABASE_URL=postgresql://localhost:5432/test_wizard
+UPLOAD_FOLDER=static/uploads
+WIZARD_APP_TESTING=True
+S3_KEY=
+S3_SECRET_ACCESS_KEY=
+ADMIN_USER=
 
 
 
