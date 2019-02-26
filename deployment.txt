@@ -149,3 +149,12 @@ To Delete And Recreate RDS Database:
 7. Remove the dot in `app` in wsgi.py, and then reload daemon and run the gunicorn status
 
 
+Inside <ssh>, Connect With RDS Database:
+1. Make sure you have postgresql-client installed. If not, <sudo apt-get install postgresql-client>
+2. Enter the following command:
+    psql \
+        —host=(RDS Endpoint) \
+        --port=5432 \
+        --username=(database owner name) \
+        --password \
+        --dbname=postgres
