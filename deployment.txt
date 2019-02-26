@@ -31,7 +31,11 @@ To Create EC2 Instance:
 10. Go to the RDS instance, click on “Modify”. Remove its default security group and set it to be the same security group as the EC2 instance using the security group ID. Click “Continue”. Check box “Apply immediately” and then “Modify DB Instane”.
 
 
-
+To Create S3 Bucket:
+1. <Create new bucket>.
+2. Select security settings.
+3. Manually upload a file via the AWS website; click into the saved file to obtain format of the IP address that a file will be saved in this bucket.
+4. Remember to add “S3 Full Access” to your group policy.
 
 
 
